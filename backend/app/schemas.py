@@ -30,15 +30,34 @@ class CheckoutRequest(BaseModel):
     proposal: Proposal
 
 
+class AlignmentBreakdown(BaseModel):
+    score: float
+    price_fit: float
+    price_component: float
+    trust_component: float
+    rating_component: float
+    weights: dict[str, float]
+
+
 class CheckoutResponse(BaseModel):
     trace_id: str
     status: str  # COMPLETED, REQUIRE_CONFIRMATION, BLOCKED
     alignment_score: Optional[float] = None
+    alignment_breakdown: Optional[AlignmentBreakdown] = None
+    risk_flags: list[str] = []
     reason: Optional[str] = None
     razorpay_called: bool = False
     gateway_ref: Optional[str] = None
     proof_of_non_execution: Optional[str] = None
     amount_paise: Optional[int] = None
+    confirmation_token: Optional[str] = None
+    confirmation_expires_at: Optional[str] = None
+    idempotent_replay: bool = False
+
+
+class ConfirmRequest(BaseModel):
+    trace_id: str
+    confirmation_token: str
 
 
 class LedgerEntryOut(BaseModel):

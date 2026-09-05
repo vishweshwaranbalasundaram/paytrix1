@@ -34,3 +34,19 @@ class MerchantTrustError(PaytrixError):
 
 class CategoryMismatchError(PaytrixError):
     code = "CATEGORY_MISMATCH"
+
+
+class AgentAuthError(PaytrixError):
+    code = "AGENT_AUTH_FAILED"
+
+
+class AgentRateLimitError(PaytrixError):
+    code = "AGENT_RATE_LIMIT_EXCEEDED"
+
+
+class IdempotencyConflictError(PaytrixError):
+    code = "IDEMPOTENCY_CONFLICT"
+
+
+class ConfirmationError(PaytrixError):
+    code = "CONFIRMATION_FAILED"

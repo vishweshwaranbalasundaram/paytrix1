@@ -44,12 +44,30 @@ def _price_fit_score(intent_envelope: IntentEnvelope, proposal: Proposal) -> flo
 
 def compute_alignment_score(intent_envelope: IntentEnvelope, proposal: Proposal) -> float:
     """Alignment Score = (Price Fit x 40%) + (Trust Score x 35%) + (Product Rating x 25%)."""
+    return compute_alignment_breakdown(intent_envelope, proposal)["score"]
+
+
+def compute_alignment_breakdown(intent_envelope: IntentEnvelope, proposal: Proposal) -> dict:
+    """Same formula as compute_alignment_score, but returns each weighted
+    component separately so the response can show judges/users *why* a
+    score came out the way it did, not just the final number."""
     price_fit = _price_fit_score(intent_envelope, proposal)
     trust = min(max(proposal.merchant_trust_score, 0.0), 1.0)
     rating = min(max(proposal.product_rating / 5.0, 0.0), 1.0)
 
-    score = (price_fit * 0.40) + (trust * 0.35) + (rating * 0.25)
-    return round(score, 4)
+    price_component = round(price_fit * 0.40, 4)
+    trust_component = round(trust * 0.35, 4)
+    rating_component = round(rating * 0.25, 4)
+    score = round(price_component + trust_component + rating_component, 4)
+
+    return {
+        "score": score,
+        "price_fit": round(price_fit, 4),
+        "price_component": price_component,
+        "trust_component": trust_component,
+        "rating_component": rating_component,
+        "weights": {"price_fit": 0.40, "trust": 0.35, "rating": 0.25},
+    }
 
 
 def decide(score: float) -> str:

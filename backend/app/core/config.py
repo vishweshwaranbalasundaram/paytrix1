@@ -19,6 +19,18 @@ class Settings(BaseSettings):
     demo_user_id: str = "usr_demo_123"
     demo_user_balance_paise: int = 1_000_000  # ₹10,000
 
+    # --- Agent identity & rate limiting ---
+    demo_agent_id: str = "agt_demo_ui"
+    demo_agent_key: str = "demo_agent_secret_key_do_not_use_in_prod"
+    agent_rate_limit_per_minute: int = 30
+
+    # --- Idempotency / replay protection ---
+    idempotency_ttl_hours: int = 24
+
+    # --- Step-up confirmation ---
+    confirmation_secret: str = "paytrix_dev_confirmation_secret_change_in_prod"
+    confirmation_token_ttl_seconds: int = 300  # 5 minutes
+
     class Config:
         env_file = ".env"
 

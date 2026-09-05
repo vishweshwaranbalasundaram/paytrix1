@@ -8,6 +8,7 @@ from app.api.middleware import RequestTracingMiddleware
 from app.core.config import settings
 from app.db.database import SessionLocal, init_db
 from app.db.seed import seed_demo_user
+from app.policies.agent_identity import seed_demo_agent
 
 
 @asynccontextmanager
@@ -16,6 +17,7 @@ async def lifespan(app: FastAPI):
     db = SessionLocal()
     try:
         seed_demo_user(db)
+        seed_demo_agent(db)
     finally:
         db.close()
     yield
